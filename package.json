@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/hun-a/nomadcoin/issues"
   },
-  "homepage": "https://github.com/hun-a/nomadcoin#readme"
+  "homepage": "https://github.com/hun-a/nomadcoin#readme",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
 }
