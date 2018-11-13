@@ -6,7 +6,7 @@ class Block {
     this.hash = hash;
     this.previousHash = previousHash;
     this.timestamp = timestamp;
-    this.data = data;
+    this.data = JSON.stringify(data);
   }
 }
 
@@ -25,7 +25,7 @@ const getLastBlock = () => blockchain[blockchain.length - 1];
 const getTimestamp = () => new Date().getTime();
 
 const createHash = (index, previousHash, timestamp, data) =>
-  CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
+  CryptoJS.SHA256(index + previousHash + timestamp + JSON.stringify(data)).toString();
 
 const createNewBlock = data => {
   const previousBlock = getLastBlock();
@@ -64,3 +64,13 @@ const isNewblockValid = (candidateBlock, latestBlock) => {
   }
   return true;
 };
+
+const isNewStructureValid = block => {
+  return (
+    typeof block.index === 'number' &&
+    typeof block.hash === 'string' &&
+    typeof block.previousHash === 'string' &&
+    typeof block.timestamp === 'number' &&
+    typeof block.data === 'string'
+  );
+}
