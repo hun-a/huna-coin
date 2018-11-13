@@ -1,0 +1,19 @@
+{
+  "name": "nomadcoin",
+  "version": "1.0.0",
+  "description": "Nomadcoin, the most awesome coin made in NodeJS",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hun-a/nomadcoin.git"
+  },
+  "author": "Huna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hun-a/nomadcoin/issues"
+  },
+  "homepage": "https://github.com/hun-a/nomadcoin#readme"
+}
