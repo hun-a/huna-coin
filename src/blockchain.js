@@ -1,4 +1,4 @@
-const CryptoJS = require('crypto-js');
+const CryptoJS = require("crypto-js");
 
 class Block {
   constructor(index, hash, previousHash, timestamp, data) {
@@ -12,10 +12,10 @@ class Block {
 
 const genesisBlock = new Block(
   0,
-  '73C19CAC3EC8D8CE13F91CA2CA615F8FC5C1E304DCF1A9C4D8CB9EE4EA994F56',
+  "73C19CAC3EC8D8CE13F91CA2CA615F8FC5C1E304DCF1A9C4D8CB9EE4EA994F56",
   null,
   1542119980449,
-  'This is the genesis!!'
+  "This is the genesis!!"
 );
 
 let blockchain = [genesisBlock];
@@ -27,7 +27,9 @@ const getTimestamp = () => new Date().getTime();
 const getBlockchain = () => blockchain;
 
 const createHash = (index, previousHash, timestamp, data) =>
-  CryptoJS.SHA256(index + previousHash + timestamp + JSON.stringify(data)).toString();
+  CryptoJS.SHA256(
+    index + previousHash + timestamp + JSON.stringify(data)
+  ).toString();
 
 const createNewBlock = data => {
   const previousBlock = getLastBlock();
@@ -48,23 +50,28 @@ const createNewBlock = data => {
     data
   );
 
+  addBlockToChain(newBlock);
+
   return newBlock;
 };
 
-const getBlocksHash = block => createHash(block.index, block.previousHash, block.timestamp, block.data);
+const getBlocksHash = block =>
+  createHash(block.index, block.previousHash, block.timestamp, block.data);
 
 const isNewblockValid = (candidateBlock, latestBlock) => {
   if (!isNewStructureValid(candidateBlock)) {
-    console.log('The candidate block structure is not valid');
+    console.log("The candidate block structure is not valid");
     return false;
   } else if (latestBlock.index + 1 !== candidateBlock.index) {
-    console.log('The candidate block doesnt have a valid index');
+    console.log("The candidate block doesnt have a valid index");
     return false;
   } else if (latestBlock.hash !== candidateBlock.previousHash) {
-    console.log('The previousHash of the candidate block is not the hash of the latest block');
+    console.log(
+      "The previousHash of the candidate block is not the hash of the latest block"
+    );
     return false;
   } else if (getBlocksHash(candidateBlock) !== candidateBlock.hash) {
-    console.log('The hash of this block is invalid');
+    console.log("The hash of this block is invalid");
     return false;
   }
   return true;
@@ -72,13 +79,13 @@ const isNewblockValid = (candidateBlock, latestBlock) => {
 
 const isNewStructureValid = block => {
   return (
-    typeof block.index === 'number' &&
-    typeof block.hash === 'string' &&
-    typeof block.previousHash === 'string' &&
-    typeof block.timestamp === 'number' &&
-    typeof block.data === 'string'
+    typeof block.index === "number" &&
+    typeof block.hash === "string" &&
+    typeof block.previousHash === "string" &&
+    typeof block.timestamp === "number" &&
+    typeof block.data === "string"
   );
-}
+};
 
 const isChainValid = candidateChain => {
   const isGenesisValid = block => {
@@ -86,7 +93,9 @@ const isChainValid = candidateChain => {
   };
 
   if (!isGenesisValid(candidateChain[0])) {
-    console.log('The candidate chains\'s genesisBlock is not the same as our genesisBlock');
+    console.log(
+      "The candidate chains's genesisBlock is not the same as our genesisBlock"
+    );
     return false;
   }
 
@@ -99,7 +108,10 @@ const isChainValid = candidateChain => {
 };
 
 const replaceChain = candidateChain => {
-  if (isChainValid(candidateChain) && candidateChain.length > getBlockchain().length) {
+  if (
+    isChainValid(candidateChain) &&
+    candidateChain.length > getBlockchain().length
+  ) {
     blockchain = candidateChain;
     return true;
   } else {
@@ -114,4 +126,9 @@ const addBlockToChain = candidateBlock => {
   } else {
     return false;
   }
+};
+
+module.exports = {
+  getBlockchain,
+  createNewBlock
 };
