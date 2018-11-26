@@ -6,7 +6,7 @@ class Block {
     this.hash = hash;
     this.previousHash = previousHash;
     this.timestamp = timestamp;
-    this.data = JSON.stringify(data);
+    this.data = data;
   }
 }
 
