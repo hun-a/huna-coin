@@ -77,7 +77,7 @@ const hashMatchesDifficulty = (hash, difficulty) => {
 }
 
 const getBlocksHash = block =>
-  createHash(block.index, block.previousHash, block.timestamp, block.data);
+  createHash(block.index, block.previousHash, block.timestamp, block.data, block.difficulty, block.nonce);
 
 const isBlockValid = (candidateBlock, latestBlock) => {
   if (!isBlockStructureValid(candidateBlock)) {
