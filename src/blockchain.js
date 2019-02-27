@@ -20,7 +20,7 @@ const genesisBlock = new Block(
   0,
   "73C19CAC3EC8D8CE13F91CA2CA615F8FC5C1E304DCF1A9C4D8CB9EE4EA994F56",
   null,
-  1542119980449,
+  1551275293,
   "This is the genesis!!",
   0,
   0
@@ -107,6 +107,10 @@ const hashMatchesDifficulty = (hash, difficulty) => {
 const getBlocksHash = block =>
   createHash(block.index, block.previousHash, block.timestamp, block.data, block.difficulty, block.nonce);
 
+const isTimestampValid = (newBlock, oldBlock) =>
+  oldBlock.timestamp - 60 < newBlock.timestamp
+  && newBlock.timestamp - 60 < getTimestamp();
+
 const isBlockValid = (candidateBlock, latestBlock) => {
   if (!isBlockStructureValid(candidateBlock)) {
     console.log("The candidate block structure is not valid");
@@ -121,6 +125,9 @@ const isBlockValid = (candidateBlock, latestBlock) => {
     return false;
   } else if (getBlocksHash(candidateBlock) !== candidateBlock.hash) {
     console.log("The hash of this block is invalid");
+    return false;
+  } else if (!isTimestampValid(candidateBlock, latestBlock)) {
+    console.log("The timestamp of this block is dodgy");
     return false;
   }
   return true;
