@@ -54,10 +54,10 @@ const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => {
   );
 };
 
-const signTxIn = (tx, txInIndex, privateKey, uTxOut) => {
+const signTxIn = (tx, txInIndex, privateKey, uTxOutList) => {
   const txIn = tx.txIns[txInIndex];
   const dataToSign = tx.id;
-  const referencedUTxOut = findUTxOut(txIn.txOutId, txIn.txOutIndex, uTxOuts);
+  const referencedUTxOut = findUTxOut(txIn.txOutId, txIn.txOutIndex, uTxOutList);
   if (referencedUTxOut === null) {
     return; // no coin
   }
@@ -217,3 +217,12 @@ const validateCoinbaseTx = (tx, blockIndex) => {
     return true;
   }
 };
+
+module.exports = {
+  getPublicKey,
+  getTxId,
+  signTxIn,
+  TxIn,
+  Transaction,
+  TxOut
+}
