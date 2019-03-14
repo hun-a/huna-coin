@@ -1,6 +1,7 @@
-const CryptoJS = require("crypto-js"),
-  EC = require("elliptic").ec,
-  utils = require("./utils");
+const CryptoJS = require("crypto-js");
+const R = require("ramda");
+const EC = require("elliptic").ec;
+const utils = require("./utils");
 
 const ec = new EC("secp256k1");
 
@@ -228,6 +229,40 @@ const createCoinbaseTx = (address, blockIndex) => {
   return tx;
 };
 
+const hasDuplicates = R.pipe(
+  R.groupBy(txIn => txIn.txOutId + txIn.txOutIndex),
+  R.values,
+  R.all(R.pipe(R.length, R.complement(R.equals(1))))
+);
+
+const validateBlockTx = (txs, uTxOutList, blockIndex) => {
+  const coinbaseTx = txs[0];
+  if (!validateCoinbaseTx(coinbaseTx, blockIndex)) {
+    console.log("Coinbase Tx is invalid");
+    return false;
+  }
+
+  const txIns = R.pipe(R.map(R.prop("txIns")), R.flatten)(txs);
+
+  if (hasDuplicates(txIns)) {
+    console.log("Found duplicated txIns");
+    return false;
+  }
+
+  return R.pipe(
+    R.slice(1, Infinity),
+    R.map(tx => validateTx(tx, uTxOutList)),
+    R.all(R.equals(true))
+  )(txs);
+};
+
+  const processTxs = (txs, uTxOutList, blockIndex) => {
+  if (!validateBlockTx(txs, uTxOutList, blockIndex)) {
+    return false;
+  }
+  return updateUTxOuts(txs, uTxOutList);
+};
+
 module.exports = {
   getPublicKey,
   getTxId,
@@ -235,5 +270,6 @@ module.exports = {
   TxIn,
   Transaction,
   TxOut,
-  createCoinbaseTx
+  createCoinbaseTx,
+  processTxs
 }

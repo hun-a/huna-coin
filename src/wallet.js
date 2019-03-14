@@ -32,7 +32,8 @@ const getPublicFromWallet = () => {
 const getBalance = (address, uTxOutList) => R.pipe(
   R.filter(uTxO => uTxO.address === address),
   R.map(R.prop('amount')),
-  R.sum)(uTxOutList);
+  R.sum
+)(uTxOutList);
 
 const initWallet = () => {
   if (fs.existsSync(privateKeyLocation)) {
