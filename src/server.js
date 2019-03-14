@@ -21,10 +21,9 @@ app.route("/blocks")
     res.send(getBlockchain());
   })
   .post((req, res) => {
-  const { body: { data } } = req;
-  const newBlock = createNewBlock(data);
-  res.send(newBlock);
-});
+    const newBlock = createNewBlock();
+    res.send(newBlock);
+  });
 
 app.post('/peers', (req, res) => {
   const { body: { peer } } = req;
