@@ -15,8 +15,8 @@ class TxOut {
 }
 
 class TxIn {
-  // uTxOutId
-  // uTxOutIndex
+  // txOutId
+  // txOutIndex
   // Signature
 }
 
@@ -37,7 +37,7 @@ class UTxOut {
 
 const getTxId = tx => {
   const txInContent = tx.txIns
-    .map(txIn => txIn.uTxOutId + txIn.uTxOutIndex)
+    .map(txIn => txIn.txOutId + txIn.txOutIndex)
     .reduce((a, b) => a + b, "");
 
   const txOutContent = tx.txOuts
@@ -47,18 +47,16 @@ const getTxId = tx => {
   return CryptoJS.SHA256(txInContent + txOutContent).toString();
 };
 
-const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => {
-  return uTxOutsList.find(
-    uTxO => uTxO.txOutId === txOutId && uTxO.txOutIndex === txOutIndex
-  );
-};
+const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => uTxOutsList.find(
+  uTxO => uTxO.txOutId === txOutId && uTxO.txOutIndex === txOutIndex
+);
 
 const signTxIn = (tx, txInIndex, privateKey, uTxOutList) => {
   const txIn = tx.txIns[txInIndex];
   const dataToSign = tx.id;
   const referencedUTxOut = findUTxOut(txIn.txOutId, txIn.txOutIndex, uTxOutList);
-  if (referencedUTxOut === null) {
-    return; // no coin
+  if (referencedUTxOut === null || referencedUTxOut === undefined) {
+    throw Error("Couldn't find the referenced uTxOut, not signing");
   }
   const referencedAddress = referencedUTxOut.address;
   if (getPublicKey(privateKey) !== referencedAddress) {

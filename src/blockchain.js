@@ -1,11 +1,15 @@
+const R = require("ramda");
 const CryptoJS = require("crypto-js");
 const hexToBinary = require("hex-to-binary");
 const Wallet = require("./wallet");
 const Transactions = require("./transactions");
+const Mempool = require("./mempool");
 
-const { getBalance, getPublicFromWallet } = Wallet;
+const { getBalance, getPublicFromWallet, createTx, getPrivateFromWallet } = Wallet;
 
 const { createCoinbaseTx, processTxs } = Transactions;
+
+const { addToMempool } = Mempool;
 
 const BLOCK_GENERATION_INTERVAL = 10;
 const DIFFICULTY_ADJUSTEMENT_INTERVAL = 10;
@@ -214,8 +218,18 @@ const addBlockToChain = candidateBlock => {
   }
 };
 
+const getUTxOutList = () => R.clone(uTxOuts);
+
 const getAccountBalance = () =>
   getBalance(getPublicFromWallet(), uTxOuts);
+
+const sendTx = (address, amount) => {
+  const tx = createTx(
+    address, amount, getPrivateFromWallet(), getUTxOutList()
+  );
+  addToMempool(tx, getUTxOutList());
+  return tx;
+};
 
 module.exports = {
   getBlockchain,
@@ -225,5 +239,6 @@ module.exports = {
   addBlockToChain,
   replaceChain,
   getBlockchain,
-  getAccountBalance
+  getAccountBalance,
+  sendTx
 };

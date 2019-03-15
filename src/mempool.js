@@ -5,7 +5,7 @@ const { validateTx } = Transactions;
 
 let mempool = [];
 
-const getTxInsInPool = mempool => R.pipe(
+const getTxInsInPool = R.pipe(
   R.map(R.prop("txIns")),
   R.flatten
 );

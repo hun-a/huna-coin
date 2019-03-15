@@ -5,7 +5,7 @@ const express = require('express'),
   P2P = require('./p2p'),
   Wallet = require('./wallet');
 
-const { getBlockchain, createNewBlock, getAccountBalance } = Blockchain;
+const { getBlockchain, createNewBlock, getAccountBalance, sendTx } = Blockchain;
 const { startP2PServer, connectToPeers } = P2P;
 const { initWallet } = Wallet;
 
@@ -35,6 +35,25 @@ app.get("/me/balance", (req, res) => {
   const balance = getAccountBalance();
   res.send({ balance });
 });
+
+app.route("/transactions")
+  .get((req, res) => {
+
+  })
+  .post((req, res) => {
+    try {
+      const { body: { address, amount } } = req;
+      if (address === undefined || amount === undefined) {
+        throw Error("Please specify and address and an amount");
+      } else {
+        const sended = sendTx(address, amount);
+        res.send(sended);
+      }
+    } catch (e) {
+      console.error(e);
+      res.status(400).send(e.message);
+    }
+  });
 
 const server = app.listen(PORT, () =>
   console.log(`Nomadcoin server running on port ${PORT}`));
