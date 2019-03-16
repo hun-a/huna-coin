@@ -279,5 +279,6 @@ module.exports = {
   getBlockchain,
   getAccountBalance,
   sendTx,
-  handleIncomingTx
+  handleIncomingTx,
+  getUTxOutList
 };

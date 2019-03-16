@@ -48,9 +48,6 @@ const getTxId = tx => {
 };
 
 const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => {
-  console.log(txOutId);
-  console.log(txOutIndex);
-  console.log(uTxOutsList)
   return uTxOutsList.find(
     uTxO => uTxO.txOutId === txOutId && uTxO.txOutIndex === txOutIndex
   );

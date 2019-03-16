@@ -55,7 +55,6 @@ const updateMempool = uTxOutList => {
 };
 
 const addToMempool = (tx, uTxOutList) => {
-  console.log(tx);
   if (!validateTx(tx, uTxOutList)) {
     throw Error("This tx is invalid. Will not add it to pool");
   } else if (!isTxValidForPool(tx, mempool)) {
