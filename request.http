@@ -34,5 +34,5 @@ Content-Type: application/json
 
 {
   "address": "047b4407acfe22f654480c18a9dd257108922080808481451a1bc4bb3447b8566b09ed1766a8ee24b2b114c5d5d9ee4968f9594c0b241cb3df8e7586519a9dab20",
-  "amount": 10
+  "amount": 100
 }
