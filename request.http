@@ -27,6 +27,9 @@ Content-Type: application/json
 GET http://localhost:3000/me/balance
 
 
+###
+GET http://localhost:3000/me/address
+
 
 ###
 POST http://localhost:3000/transactions
