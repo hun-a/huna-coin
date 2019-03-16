@@ -5,6 +5,8 @@ const { validateTx } = Transactions;
 
 let mempool = [];
 
+const getMempool = () => R.clone(mempool);
+
 const getTxInsInPool = R.pipe(
   R.map(R.prop("txIns")),
   R.flatten
@@ -37,5 +39,6 @@ const addToMempool = (tx, uTxOutList) => {
 };
 
 module.exports = {
-  addToMempool
+  addToMempool,
+  getMempool
 };

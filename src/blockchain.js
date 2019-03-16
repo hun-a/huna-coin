@@ -9,7 +9,7 @@ const { getBalance, getPublicFromWallet, createTx, getPrivateFromWallet } = Wall
 
 const { createCoinbaseTx, processTxs } = Transactions;
 
-const { addToMempool } = Mempool;
+const { addToMempool, getMempool } = Mempool;
 
 const BLOCK_GENERATION_INTERVAL = 10;
 const DIFFICULTY_ADJUSTEMENT_INTERVAL = 10;
@@ -56,7 +56,7 @@ const createNewBlock = () => {
     getPublicFromWallet(),
     getNewestBlock().index + 1
   );
-  const blockData = [coinbaseTx];
+  const blockData = [coinbaseTx].concat(getMempool());
   return createNewRawBlock(blockData);
 };
 
