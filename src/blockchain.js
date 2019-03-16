@@ -189,12 +189,21 @@ const isChainValid = candidateChain => {
     return false;
   }
 
-  for (let i = 1; i < candidateChain.length; i++) {
-    if (!isBlockValid(candidateChain[i], candidateChain[i - 1])) {
-      return false;
+  let foreignUTxOuts = [];
+
+  for (let i = 0; i < candidateChain.length; i++) {
+    const currentBlock = candidateChain[i];
+    if (i !== 0 && !isBlockValid(candidateChain[i], candidateChain[i - 1])) {
+      return null;
+    }
+    foreignUTxOuts = processTxs(currentBlock.data, foreignUTxOuts, currentBlock.index);
+
+    if (foreignUTxOuts === null) {
+      return null;
     }
   }
-  return true;
+
+  return foreignUTxOuts;
 };
 
 const sumDifficulty = anyBlockchain => anyBlockchain
@@ -202,11 +211,16 @@ const sumDifficulty = anyBlockchain => anyBlockchain
   .reduce((a, b) => a + b);
 
 const replaceChain = candidateChain => {
+  const foreignUTxOuts = isChainValid(candidateChain);
+  const validChain = foreignUTxOuts !== null;
   if (
-    isChainValid(candidateChain) &&
+    validChain &&
     sumDifficulty(candidateChain) > sumDifficulty(getBlockchain())
   ) {
     blockchain = candidateChain;
+    uTxOuts = foreignUTxOuts;
+    updateMempool(uTxOuts);
+    require("./p2p").broadcastNewBlock();
     return true;
   } else {
     return false;
@@ -246,7 +260,13 @@ const sendTx = (address, amount) => {
     getMempool()
   );
   addToMempool(tx, getUTxOutList());
+  require("./p2p").broadcastMempool();
   return tx;
+};
+
+
+const handleIncomingTx = tx => {
+  addToMempool(tx, getUTxOutList());
 };
 
 module.exports = {
@@ -258,5 +278,6 @@ module.exports = {
   replaceChain,
   getBlockchain,
   getAccountBalance,
-  sendTx
+  sendTx,
+  handleIncomingTx
 };

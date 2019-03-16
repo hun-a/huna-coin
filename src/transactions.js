@@ -47,9 +47,14 @@ const getTxId = tx => {
   return CryptoJS.SHA256(txInContent + txOutContent).toString();
 };
 
-const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => uTxOutsList.find(
-  uTxO => uTxO.txOutId === txOutId && uTxO.txOutIndex === txOutIndex
-);
+const findUTxOut = (txOutId, txOutIndex, uTxOutsList) => {
+  console.log(txOutId);
+  console.log(txOutIndex);
+  console.log(uTxOutsList)
+  return uTxOutsList.find(
+    uTxO => uTxO.txOutId === txOutId && uTxO.txOutIndex === txOutIndex
+  );
+};
 
 const signTxIn = (tx, txInIndex, privateKey, uTxOutList) => {
   const txIn = tx.txIns[txInIndex];
@@ -156,7 +161,7 @@ const validateTxIn = (txIn, tx, uTxOutList) => {
   const wantedTxOut = uTxOutList.find(
     uTxO => uTxO.txOutId === txIn.txOutId && uTxO.txOutIndex === txIn.txOutIndex
   );
-  if (wantedTxOut === null) {
+  if (R.isNil(wantedTxOut)) {
     return false;
   } else {
     const address = wantedTxOut.address;
@@ -165,15 +170,17 @@ const validateTxIn = (txIn, tx, uTxOutList) => {
   }
 };
 
-const getAmountInTxIn = (txIn, uTxOutList) =>
+const getAmountInTxIn = (txIn, uTxOutList) => 
   findUTxOut(txIn.txOutId, txIn.txOutIndex, uTxOutList).amount;
 
 const validateTx = (tx, uTxOutList) => {
   if (!isTxStructureValid(tx)) {
+    console.log("Tx structure is invalid");
     return false;
   }
 
   if (getTxId(tx) !== tx.id) {
+    console.log("Tx ID is not valid");
     return false;
   }
 
@@ -182,17 +189,20 @@ const validateTx = (tx, uTxOutList) => {
   );
 
   if (!hasValidTxIns) {
+    console.log(`The tx: ${tx} doesn't have valid txIns`);
     return false;
   }
 
   const amountInTxIns = tx.txIns.reduce(
-    (a, txIn) => a + getAmountInTxIn(txIn, uTxOutList),
-    0
+    (a, txIn) => a + getAmountInTxIn(txIn, uTxOutList), 0
   );
 
   const amountInTxOuts = tx.txOuts.reduce((a, txOut) => a + txOut.amount, 0);
 
   if (amountInTxIns !== amountInTxOuts) {
+    console.log(
+      `The tx: ${tx} doesn't have the same amount in the txOut as in the txIns`
+    );
     return false;
   }
 
