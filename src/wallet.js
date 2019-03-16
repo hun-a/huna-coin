@@ -69,11 +69,33 @@ const createTxOut = (receierAddress, myAddress, amount, leftOverAmount) => {
   }
 };
 
-const createTx = (receiverAddress, amount, privateKey, uTxOutList) => {
+const filterUTxOutsFromMempool = (uTxOutList, mempool) => {
+  const txIns = R.pipe(
+    R.map(R.prop("txIns")),
+    R.flatten
+  )(mempool);
+
+  const removables = [];
+
+  for (const uTxOut of uTxOutList) {
+    const txIn = txIns.find(
+      tIn => tIn.txOutIndex === uTxOut.txOutIndex && tIn.txOutId === uTxOut.txOutId
+    );
+    if (!R.isNil(txIn)) {
+      removables.push(uTxOut);
+    }
+  }
+
+  return R.without(removables, uTxOutList);
+};
+
+const createTx = (receiverAddress, amount, privateKey, uTxOutList, mempool) => {
   const myAddress = getPublicKey(privateKey);
   const myUTxOuts = uTxOutList.filter(uTxO => uTxO.address === myAddress);
 
-  const { includedUTxOuts, leftOverAmount } = findAmountInUTxOuts(amount, myUTxOuts);
+  const filteredUTxOuts = filterUTxOutsFromMempool(myUTxOuts, mempool);
+
+  const { includedUTxOuts, leftOverAmount } = findAmountInUTxOuts(amount, filteredUTxOuts);
 
   const toUnsignedTxIn = uTxOut => {
     const txIn = new TxIn();
