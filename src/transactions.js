@@ -201,14 +201,19 @@ const validateTx = (tx, uTxOutList) => {
 
 const validateCoinbaseTx = (tx, blockIndex) => {
   if (getTxId(tx) !== tx.id) {
+    console.log("Invalid txId on validating coinbase tx");
     return false;
   } else if (tx.txIns.length !== 1) {
+    console.log("The length of txIns is not a one on validating coinbase tx");
     return false;
   } else if (tx.txIns[0].txOutIndex !== blockIndex) {
+    console.log("The txOutIndex is invalid on validating coinbase tx");
     return false;
   } else if (tx.txOuts.length !== 1) {
+    console.log("The length of txOuts is not a one on validating coinbase tx");
     return false;
   } else if (tx.txOuts[0].amount !== COINBASE_AMOUNT) {
+    console.log("The amount of coins are not equal" + COINBASE_AMOUNT);
     return false;
   } else {
     return true;
