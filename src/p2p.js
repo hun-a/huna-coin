@@ -80,6 +80,11 @@ const initSocketConnection = ws => {
   setTimeout(() => {
     sendMessageToAll(getAllMempool());
   }, 1000);
+  setInterval(() => {
+    if (sockets.includes(ws)) {
+      sendMessage(ws);
+    }
+  }, 1000);
 };
 
 const parseData = data => {
