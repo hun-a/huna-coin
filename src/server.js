@@ -55,6 +55,20 @@ app.get("/blocks/:hash", (req, res) => {
   )();
 });
 
+app.get("/transactions/:id", (req, res) => {
+  R.pipe(
+    getBlockchain,
+    R.map(R.prop("data")),
+    R.flatten,
+    R.find(b => R.equals(b.id, req.params.id)),
+    R.ifElse(
+      R.isNil,
+      () => res.status(400).send("Transaction not found"),
+      tx => res.send(tx)
+    )
+  )();
+});
+
 app.route("/transactions")
   .get((req, res) => {
     res.send(getMempool());
