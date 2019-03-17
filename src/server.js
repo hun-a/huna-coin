@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const morgan = require("morgan");
 const R = require("ramda");
 const Blockchain = require("./blockchain");
@@ -17,6 +18,7 @@ const PORT = process.env.HTTP_PORT || 3000;
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use(morgan('combined'));
 
 app.route("/blocks")
