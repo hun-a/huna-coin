@@ -69,7 +69,7 @@ const startP2PServer = server => {
   wsServer.on("error", () => {
     console.log("error");
   });
-  console.log(`Nomadcoin P2PServer Runnging!`);
+  console.log(`Huna-coin P2PServer Runnging!`);
 };
 
 const initSocketConnection = ws => {

@@ -1,21 +1,21 @@
 {
-  "name": "nomadcoin",
+  "name": "huna-coin",
   "version": "1.0.0",
-  "description": "Nomadcoin, the most awesome coin made in NodeJS",
+  "description": "Huna-coin, the most awesome coin made in NodeJS",
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hun-a/nomadcoin.git"
+    "url": "git+https://github.com/hun-a/huna-coin.git"
   },
   "author": "Huna",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hun-a/nomadcoin/issues"
+    "url": "https://github.com/hun-a/huna-coin/issues"
   },
-  "homepage": "https://github.com/hun-a/nomadcoin#readme",
+  "homepage": "https://github.com/hun-a/huna-coin#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",

@@ -1,6 +1,6 @@
-# Nomadcoin
+# Huna-coin
 
-Nomadcoin, the most awesome coin made in NodeJS
+Huna-coin, the most awesome coin made in NodeJS originated from [Nomadcoin](https://github.com/nomadcoders/nomadcoin)
 
 # How to start?
 

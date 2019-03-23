@@ -97,7 +97,7 @@ app.get("/address/:address", (req, res) => {
 });
 
 const server = app.listen(PORT, () =>
-  console.log(`Nomadcoin server running on port ${PORT}`));
+  console.log(`Huna-coin server running on port ${PORT}`));
 
 initWallet()
 startP2PServer(server);
